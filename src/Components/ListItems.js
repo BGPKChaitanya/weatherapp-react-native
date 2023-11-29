@@ -1,17 +1,29 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Icon} from '@rneui/themed';
+import {weatherType} from '../Utilities/WeatherType';
+import moment from 'moment';
 
 export default function ListItems(props) {
   const {dt_txt, min, max, condition} = props;
-  const {item, date, temp} = styles;
+  const {item, date, temp, lowhigh} = styles;
   return (
     <View style={item}>
-      <Icon name="sunny" size={50} color="white" />
+      <Icon
+        name={weatherType[condition].icon}
+        type="feather"
+        size={50}
+        color="white"
+      />
       <View>
-        <Text style={date}>Date : {dt_txt}</Text>
-        <Text style={temp}>Low : {min}</Text>
-        <Text style={temp}>High : {max}</Text>
+        <Text style={date}>
+          Day : {moment(dt_txt).format('DD-MM-YYYY dddd')}
+        </Text>
+        <Text style={date}>Time : {moment(dt_txt).format('h:mm:ss a')}</Text>
+        <View style={lowhigh}>
+          <Text style={temp}>Low : {Math.round(min - 273.15)} °C</Text>
+          <Text style={temp}>High : {Math.round(max - 273.15)} °C</Text>
+        </View>
       </View>
     </View>
   );
@@ -38,5 +50,10 @@ const styles = StyleSheet.create({
   temp: {
     color: 'white',
     fontSize: 15,
+    marginRight: 10,
+  },
+  lowhigh: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });

@@ -9,13 +9,14 @@ import React from 'react';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Icon} from '@rneui/themed';
 import RowText from '../Components/RowText';
+import {weatherType} from '../Utilities/WeatherType';
 
-export default function CurrentWeather() {
+export default function CurrentWeather({weatherList}) {
   const {
     wrapper,
     container,
     ImageWrapper,
-    temp,
+    tempSty,
     feelslike,
     highlowWrapper,
     highlow,
@@ -23,27 +24,36 @@ export default function CurrentWeather() {
     description,
     message,
   } = styles;
+  console.log(weatherList);
+  const {
+    main: {feels_like, temp_max, temp_min, temp},
+    weather,
+  } = weatherList;
+  const weatherImage = weatherType[weather[0].main].backgroundImage;
+  const weatherIcon = weatherType[weather[0].main].icon;
+  const weatherMessage = weatherType[weather[0].main].message;
+
   return (
     <SafeAreaView style={wrapper}>
-      <ImageBackground
-        source={require('../../assets/sky.jpg')}
-        style={ImageWrapper}>
+      <ImageBackground source={weatherImage} style={ImageWrapper}>
         <View style={container}>
-          <Icon name="sun" type="feather" size={100} color="white" />
-          <Text style={temp}>6</Text>
-          <Text style={feelslike}>Feels Like: 5</Text>
+          <Icon name={weatherIcon} type="feather" size={100} color="white" />
+          <Text style={tempSty}>{Math.round(temp - 273.15)} °C</Text>
+          <Text style={feelslike}>
+            Feels like: {Math.round(feels_like - 273.15)} °C
+          </Text>
           <RowText
             Wrapper={highlowWrapper}
-            mOne={'High: 8'}
-            mTwo={'Low: 6'}
+            mOne={`H: ${Math.round(temp_max - 273.15)} °C`}
+            mTwo={`L: ${Math.round(temp_min - 273.15)} °C`}
             mOneStyles={highlow}
             mTwoStyles={highlow}
           />
         </View>
         <RowText
           Wrapper={bodyWrapper}
-          mOne={'its Sunny'}
-          mTwo={'A Perfect Day for T-Shirt wearing'}
+          mOne={weather[0].description}
+          mTwo={weatherMessage}
           mOneStyles={description}
           mTwoStyles={message}
         />
@@ -65,7 +75,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  temp: {
+  tempSty: {
     color: 'white',
     fontSize: 48,
   },

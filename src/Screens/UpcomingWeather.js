@@ -165,16 +165,16 @@ const Data = [
   },
 ];
 
-export default function UpcomingWeather() {
+export default function UpcomingWeather({weatherData}) {
   const {container, Image, heading} = styles;
   return (
     <SafeAreaView style={container}>
       <ImageBackground
         source={require('../../assets/clouds.jpg')}
         style={Image}>
-        <Text style={heading}>UPCOMING WEATHER</Text>
+        {/* <Text style={heading}>UPCOMING WEATHER</Text> */}
         <FlatList
-          data={Data}
+          data={weatherData}
           renderItem={({item}) => (
             <ListItems
               condition={item.weather[0].main}

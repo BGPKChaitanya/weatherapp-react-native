@@ -1,20 +1,35 @@
 import React from 'react';
-import CurrentWeather from './src/Screens/CurrentWeather';
-import UpcomingWeather from './src/Screens/UpcomingWeather';
-import City from './src/Screens/City';
 import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Tabs from './src/Components/Tabs';
+import Counter from './src/Demonstration/Counter';
+import {GetWeather} from './src/Hooks/GetWeather';
+import {ActivityIndicator, View, StyleSheet} from 'react-native';
 
-const BottomTab = createBottomTabNavigator();
+// const API_KEY = '4a67ecbac3d6c8e64745381681a078c';
 
 export default function App() {
+  const [loading, weather, Error] = GetWeather();
+  console.log(loading, weather, Error);
+
+  if (weather && weather.list) {
+    return (
+      <NavigationContainer>
+        <Tabs weather={weather} />
+      </NavigationContainer>
+      // <Counter />
+    );
+  }
   return (
-    <NavigationContainer>
-      <BottomTab.Navigator>
-        <BottomTab.Screen name="Current" component={CurrentWeather} />
-        <BottomTab.Screen name="UpcomingWeather" component={UpcomingWeather} />
-        <BottomTab.Screen name="City" component={City} />
-      </BottomTab.Navigator>
-    </NavigationContainer>
+    <View style={styles.constainer}>
+      <ActivityIndicator size={'large'} color={'blue'} />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  constainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});

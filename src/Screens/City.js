@@ -9,45 +9,48 @@ import React from 'react';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Icon} from '@rneui/themed';
 import IconText from '../Components/IconText';
+import moment from 'moment';
 
-export default function City() {
+export default function City({CityDetails}) {
   const {
     container,
     ImageLayout,
     cityName,
     countryName,
     cityText,
-    population,
+    popSty,
     populationWrapper,
     riserWrapper,
     riserText,
   } = styles;
+  console.log('City Details: ', CityDetails);
+  const {name, country, population, sunrise, sunset} = CityDetails;
   return (
     <SafeAreaView style={container}>
       <ImageBackground
-        source={require('../../assets/yellow_city.jpg')}
+        source={require('../../assets/city.jpg')}
         style={ImageLayout}>
-        <Text style={[cityText, cityName]}>London</Text>
-        <Text style={[cityText, countryName]}>UK</Text>
+        <Text style={[cityText, cityName]}>{name}</Text>
+        <Text style={[cityText, countryName]}>{country}</Text>
         <IconText
           iconName={'user'}
           iconColor={'white'}
-          ViewText={'8000'}
-          styleText={population}
+          ViewText={population}
+          styleText={popSty}
           IconType={'feather'}
         />
         <View style={riserWrapper}>
           <IconText
             iconName={'sunrise'}
             iconColor={'white'}
-            ViewText={'06:58:10 AM'}
+            ViewText={moment(sunrise).format('h:mm:ss a')}
             styleText={riserText}
             IconType={'feather'}
           />
           <IconText
             iconName={'sunset'}
             iconColor={'white'}
-            ViewText={'05:38:14 PM'}
+            ViewText={moment(sunset).format('h:mm:ss a')}
             styleText={riserText}
             IconType={'feather'}
           />
@@ -83,7 +86,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  population: {
+  popSty: {
     fontSize: 25,
     color: 'white',
   },
